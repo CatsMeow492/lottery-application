@@ -16,7 +16,22 @@ contract Lottery {
     function getBalance() public view returns (uint) { 
         return address(this).balance;
     }
+    // random function
+    function random() public view returns(uint) {
+        return uint(keccak256(abi.encodePacked(block.timestamp, block.difficulty, players.length)));
+    }
     // manager clicks a function, it should
+    function selectWinner() public {
+        // generate a random number - psuedorandom number (random is not actually possible on blockchains) https://github.com/CatsMeow492/not-so-smart-contracts/tree/master/bad_randomness
+        // Use ORACLES to find a random number - use third party in production
+        // first take some global variables, encode it, hash it, convert to unit
+        uint r = uint(keccak256(abi.encodePacked(block.timestamp, block.difficulty, players.length)));
+        // modulo it with number of players
+        // map the remainder to a index in the array
+        // transfer all the money in the contract to the addresss in the array
+        // notify the losers
+        // finally empty the array and start over
+    }
         // select a player in random
         // send the total money in the contract to the player
 }
