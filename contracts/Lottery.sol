@@ -7,21 +7,28 @@ contract Lottery {
     constructor () public {
         manager = msg.sender;
     }
+    modifier onlyManager () {
+        require(msg.sender == manager, "Only the manager can call this function")
+        _;
+    }
     // Invest money by players - anyone in the world
-    function invest() payable public {
+    function invest() payable public { // manager should not be able to invest more
+        // the contract should require a minimum investment
         // i want to keep a track of who all invested
         players.push(msg.sender);
     }
     // get balance - current balance
-    function getBalance() public view returns (uint) { 
+    function getBalance() public view onlyManager returns (uint) { 
+        // only the manager should be able to see the balance
         return address(this).balance;
     }
     // random function
-    function random() public view returns(uint) {
+    function random() private view returns(uint) {
         return uint(keccak256(abi.encodePacked(block.timestamp, block.difficulty, players.length)));
     }
     // manager clicks a function, it should
-    function selectWinner() public {
+    function selectWinner() public onlyManager {
+        // only the manager should be able to call this function 
         // generate a random number - psuedorandom number (random is not actually possible on blockchains) https://github.com/CatsMeow492/not-so-smart-contracts/tree/master/bad_randomness
         // Use ORACLES to find a random number - use third party in production
         // first take some global variables, encode it, hash it, convert to unit
@@ -34,7 +41,5 @@ contract Lottery {
         winner.transfer(address(this).balance);
         // notify the losers
         // finally empty the array and start over
-    }
-        // select a player in random
-        // send the total money in the contract to the player
+        players = new address payable[](0);
 }

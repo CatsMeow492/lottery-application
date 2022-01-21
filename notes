@@ -5,3 +5,6 @@ For games smart contracts have the advantage of transparency and immutability.
 Players know how the game works.
 ## Immutability
 The game cannot change 
+
+Any address that the contract is intended to be paid to by the contract must be 'payable' to the contract
+Ex: `address payable winner`
